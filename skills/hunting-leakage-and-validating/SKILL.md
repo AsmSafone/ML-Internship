@@ -39,15 +39,26 @@ rule, not the world — a circular result. They may serve as a BASELINE to beat,
 Accuracy of 71% on a label that is 62% positive is 9 points of skill, not 71. Every score sits
 next to its naive baseline (majority class / random ranking), always.
 
+## Sealed holdouts leave receipts
+
+If you claim a sealed or holdout evaluation ("touched once, blind"), commit the receipts: the
+cell or script that builds the sealed frame, AND the metrics file it produced. A sealed claim
+that can only be verified by digging through git history isn't sealed — it's trusted. And
+check your population definition for future information: if the rows you keep depend on
+anything from the outcome window (e.g. "clients still active in the label month"), say so in
+your limitations — it's a choice, not a crime, but hiding it is.
+
 ## The attack checklist (run it before you believe anything)
 
 - [ ] Timeline drawn: all features strictly before the label window
 - [ ] No label-derived or sibling columns in the features (train-without test on suspects)
 - [ ] No product flags / existing-system scores as features
+- [ ] Population selection checked for outcome-window information (and disclosed if used)
 - [ ] Split grouped by the repeating entity (and/or time-based)
 - [ ] Base rate printed next to every metric
 - [ ] Top feature importance sanity-checked — "too good" investigated, not celebrated
 - [ ] Metrics recomputed out-of-fold, never in-sample
+- [ ] Sealed/holdout claims: the frame-builder and the resulting metrics file are committed
 
 ## How to verify
 

@@ -11,7 +11,9 @@ report. The rest of the repo is the shared reference; this folder is yours.
    baseline you compare against, and reviewers expect to find it unchanged.
 2. **No datasets in git.** CSVs inside `work/` are gitignored, and CI fails if any dataset
    CSV is committed anywhere in the repo. Small summary tables belong in your report as
-   markdown, not as data files.
+   markdown, not as data files. Metrics JSONs are the opposite: keep files like
+   `work/outputs/*.json` **committed** — they are the receipts your report's numbers trace
+   back to. Don't add ignore rules that hide them.
 3. **Stay reproducible.** Fix your random seeds and note them in your report. Someone with a
    fresh clone should be able to re-run your work from your instructions alone.
 4. **Public-safety language.** Everything here may end up public with your submission:

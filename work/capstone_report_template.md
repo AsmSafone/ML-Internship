@@ -56,7 +56,10 @@ tomorrow. State your confidence and the limits explicitly.
 ## 8. Reproducibility
 
 The exact commands to re-run everything from a fresh clone, your random seeds, and your
-environment (`pip freeze` highlights or `requirements.txt` deltas).
+environment (`pip freeze` highlights or `requirements.txt` deltas). If you claim a sealed or
+holdout evaluation, two things must be committed: the cell/script that builds the sealed
+frame, and the metrics file it produced — "evaluated once, blind" should be checkable from
+your repo, not taken on faith.
 
 ## 9. Acknowledgments & data credit
 
