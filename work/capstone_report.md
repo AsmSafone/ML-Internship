@@ -1,6 +1,6 @@
 # Capstone Report — Refresh / Content Opportunity Scoring
 
-- **Author:** Safone
+- **Author:** A.S.M. Arsad Ahamed Safone
 - **Lane:** Refresh / Content Opportunity Scoring (Lane 2)
 - **Repo:** https://github.com/AsmSafone/ML-Internship
 - **Date:** 2026-08-03
@@ -41,7 +41,7 @@ Out of thousands of published content items across client sites, search visibili
 ## 3. Baseline
 
 - **Baseline Rule Definition:** A transparent 4-part composite score combining search demand, content staleness, position opportunity, and word count depth gap:
-  $$\text{baseline\_score} = 100 \times (0.40 \cdot \text{visibility} + 0.30 \cdot \text{freshness\_risk} + 0.25 \cdot \text{position\_opportunity} + 0.05 \cdot \text{depth\_gap})$$
+  $$\text{Score}_{\text{baseline}} = 100 \times \left(0.40 \cdot \text{Visibility} + 0.30 \cdot \text{FreshnessRisk} + 0.25 \cdot \text{PositionOpp} + 0.05 \cdot \text{DepthGap}\right)$$
 - **Baseline Reason Codes:** `stale_visible_page`, `declining_with_demand`, `thin_visible_page`, `page_one_decay_risk`, `low_ctr_visible_page`, `low_engagement_visible_page`.
 - **Baseline Performance (Client-Holdout Test Set):**
   - **Precision@50:** `0.300` (Base Rate: `0.511`)
@@ -87,7 +87,7 @@ Out of thousands of published content items across client sites, search visibili
 
 ## 7. Recommendation & Action Playbook
 
-- **Final Queue Blend:** `final_refresh_score = 100 * (0.70 * model_prob + 0.30 * normalized_baseline_score)`.
+- **Final Queue Blend:** $$\text{Score}_{\text{final}} = 100 \times \left(0.70 \cdot P_{\text{model}} + 0.30 \cdot \frac{\text{Score}_{\text{baseline}}}{100}\right)$$
 - **Action Playbook Mapping:**
   - `low_ctr_visible_page` $\rightarrow$ **Rewrite Title & Meta Description (CTR Optimization)**
   - `thin_visible_page` $\rightarrow$ **Expand Content Depth & Add Comprehensive Sections**

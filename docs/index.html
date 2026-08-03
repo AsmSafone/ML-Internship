@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refresh / Content Opportunity Scoring — Capstone Research Paper</title>
+  <meta name="description"
+    content="Academic Capstone Research Paper by A.S.M. Arsad Ahamed Safone on Search Intelligence Refresh Opportunity Scoring using Machine Learning on 79M-row FlyRank warehouse data.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    :root {
+      --paper-bg: #ffffff;
+      --body-bg: #f3f4f6;
+      --text-main: #111827;
+      --text-muted: #4b5563;
+      --accent-color: #1e3a8a;
+      --link-color: #2563eb;
+      --border-dark: #111827;
+      --border-light: #e5e7eb;
+      --code-bg: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Lora', Georgia, 'Times New Roman', serif;
+      background-color: var(--body-bg);
+      color: var(--text-main);
+      line-height: 1.75;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      padding: 40px 15px;
+    }
+
+    /* Paper Page Layout (LaTeX PDF style) */
+    .paper-page {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: var(--paper-bg);
+      padding: 70px 80px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+    }
+
+    /* Title Block */
+    .paper-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .paper-venue {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent-color);
+      margin-bottom: 16px;
+    }
+
+    .paper-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+
+    .paper-authors {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .paper-affiliation {
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .paper-meta {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 12px;
+    }
+
+    .paper-meta a {
+      color: var(--link-color);
+      text-decoration: none;
+    }
+
+    .paper-meta a:hover {
+      text-decoration: underline;
+    }
+
+    /* Abstract Section */
+    .abstract-container {
+      margin: 0 30px 40px 30px;
+      padding: 24px 28px;
+      background-color: #f9fafb;
+      border-left: 3px solid var(--accent-color);
+      font-size: 0.96rem;
+      line-height: 1.7;
+    }
+
+    .abstract-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-color);
+      margin-bottom: 8px;
+    }
+
+    .keywords {
+      margin-top: 14px;
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .keywords strong {
+      font-style: normal;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+    }
+
+    /* Sections & Typography */
+    h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 42px;
+      margin-bottom: 16px;
+      padding-bottom: 6px;
+      border-bottom: 1.5px solid var(--text-main);
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    h2 .sec-num {
+      color: var(--accent-color);
+      font-weight: 800;
+    }
+
+    h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 16px;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    ul,
+    ol {
+      margin-left: 28px;
+      margin-bottom: 18px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    strong {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    /* LaTeX Display Math Styling */
+    .latex-equation {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 18px 24px;
+      margin: 22px 0;
+      text-align: center;
+      font-size: 1.05rem;
+      overflow-x: auto;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+    /* LaTeX Booktabs Table Styling */
+    .table-wrapper {
+      margin: 28px 0;
+      overflow-x: auto;
+    }
+
+    table.booktabs {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      margin: 0 auto;
+    }
+
+    table.booktabs caption {
+      caption-side: top;
+      font-family: 'Lora', serif;
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 10px;
+      text-align: left;
+      color: var(--text-main);
+    }
+
+    table.booktabs th {
+      border-top: 2px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-dark);
+      padding: 10px 14px;
+      font-weight: 600;
+      text-align: left;
+      color: var(--text-main);
+      background-color: #f8fafc;
+    }
+
+    table.booktabs td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      color: var(--text-main);
+    }
+
+    table.booktabs tr:last-child td {
+      border-bottom: 2px solid var(--border-dark);
+    }
+
+    table.booktabs tr.selected-model {
+      background-color: rgba(30, 58, 138, 0.05);
+      font-weight: 600;
+    }
+
+    table.booktabs tr.selected-model td {
+      color: var(--accent-color);
+    }
+
+    .num-col {
+      text-align: right;
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* Code Snippets */
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88em;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 5px;
+      border-radius: 3px;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Footnote / References */
+    .references {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-dark);
+      font-size: 0.9rem;
+    }
+
+    .references ol {
+      margin-left: 20px;
+    }
+
+    .references li {
+      margin-bottom: 8px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px 5px;
+      }
+
+      .paper-page {
+        padding: 35px 20px;
+      }
+
+      .paper-title {
+        font-size: 1.6rem;
+      }
+
+      .abstract-container {
+        margin: 0 0 30px 0;
+        padding: 16px;
+      }
+
+      .paper-meta {
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <article class="paper-page">
+
+    <!-- Header / Title Block -->
+    <header class="paper-header">
+      <div class="paper-venue">Capstone Research Paper</div>
+      <h1 class="paper-title">Search Intelligence Refresh Opportunity Scoring: Machine Learning Prioritization of Search
+        Traffic Decay</h1>
+
+      <div class="paper-authors">A.S.M. Arsad Ahamed Safone</div>
+      <div class="paper-affiliation">FlyRank Machine Learning Internship Program &bull; Lane 2 (Content Refresh Scoring)
+      </div>
+
+      <div class="paper-meta">
+        <div><strong>Date:</strong> August 2026</div>
+        <div><strong>Repository:</strong> <a href="https://github.com/AsmSafone/ML-Internship"
+            target="_blank">github.com/AsmSafone/ML-Internship</a></div>
+      </div>
+    </header>
+
+    <!-- Abstract -->
+    <div class="abstract-container">
+      <div class="abstract-title">Abstract</div>
+      <p>
+        Out of thousands of published content items across client sites, search visibility naturally decays over time
+        while human editorial review capacity remains strictly limited. This project addresses the question of how to
+        score and prioritize decaying pages to direct editorial updates where traffic recovery potential is highest.
+        Using FlyRank's 79M-row warehouse performance dataset, we engineered a 10-feature opportunity frame and
+        evaluated rule baselines against Logistic Regression, Decision Tree, and Random Forest models on client-holdout
+        splits (<code>GroupShuffleSplit</code> on <code>client_id</code>). On unseen client holdouts, Random Forest
+        achieved a Precision@50 of <strong>0.680</strong> (and <strong>1.000</strong> in the final blended queue),
+        representing a <strong>2.2x to 3.3x lift</strong> over the transparent rule baseline (0.300). The final system
+        outputs an automated Content Action Playbook with explicit reason codes (e.g. CTR Optimization, Content Depth
+        Expansion, Page 1 Protection), providing scalable decision-support for content strategy operations.
+      </p>
+      <div class="keywords">
+        <strong>Keywords—</strong> Content Refresh Scoring, Machine Learning Prioritization, Organic Search Decay,
+        Grouped Validation, FlyRank Warehouse Dataset.
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <section>
+      <h2><span class="sec-num">1.</span> Problem Framing</h2>
+      <p>
+        Organic search traffic is non-stationary: content published on digital properties experiences performance decay
+        due to shifting search intent, competitor content updates, and search engine algorithm iterations. However,
+        editorial teams face severe bandwidth constraints, typically capable of updating only 50 to 100 pages per month
+        out of enterprise catalogues containing tens of thousands of URLs.
+      </p>
+      <ul>
+        <li><strong>Decision Supported:</strong> Operational prioritization of monthly editorial review resources
+          (ranking candidate pages for top-\(K\) monthly review).</li>
+        <li><strong>Unit of Analysis:</strong> One row = <strong>one pseudonymized content item (page) for a given
+            client</strong> over a trailing 90-day aggregation window.</li>
+        <li><strong>Output:</strong> A prioritized action queue with composite opportunity scores (\(0 \text{ to }
+          100\)), primary reason codes, and recommended editorial actions.</li>
+        <li><strong>Action Taken:</strong> Content editors review the top candidates and execute specific updates
+          (updating outdated facts, expanding depth, or optimizing titles/meta descriptions).</li>
+        <li><strong>Cost of Errors:</strong>
+          <ul>
+            <li><em>False Positive:</em> Wasted editorial hours spent rewriting content that did not need a refresh.
+            </li>
+            <li><em>False Negative:</em> Unnoticed search visibility decay leading to compounding organic traffic drops
+              and revenue loss.</li>
+          </ul>
+        </li>
+        <li><strong>Why Machine Learning Beats Static Rules:</strong> Hand-written rules cannot dynamically scale or
+          handle non-linear interactions across 10+ search visibility, position tier, CTR, and engagement metrics across
+          clients with varying history depths.</li>
+      </ul>
+    </section>
+
+    <!-- Section 2 -->
+    <section>
+      <h2><span class="sec-num">2.</span> Data Safety & Provenance</h2>
+      <p>
+        All experiments were conducted on the FlyRank Pseudonymized Warehouse Release (<code>v20260703</code>) hosted on
+        Hugging Face.
+      </p>
+      <ul>
+        <li><strong>Tables Utilized:</strong> <code>fact_content_daily_performance</code> (78.8M daily fact rows),
+          <code>dim_clients</code> (104 clients), and <code>dim_content</code> (519,606 content items).</li>
+        <li><strong>Deliberate Feature Exclusions (Leakage Prevention):</strong>
+          <ul>
+            <li><code>trend_direction</code> and <code>trend_pct</code>: Excluded from feature matrices because they are
+              the direct source of the target label <code>is_declining_label</code>.</li>
+            <li>Downstream product decision flags (<code>health_score</code>, <code>priority_score</code>,
+              <code>action_type</code>): Excluded to prevent learning past rules rather than organic search behavior.
+            </li>
+            <li>Pseudonymous IDs (<code>content_id</code>, <code>client_id</code>): Retained strictly for relational
+              joins and grouped validation splits.</li>
+          </ul>
+        </li>
+        <li><strong>Privacy Audit:</strong> Zero raw URLs, domain names, client names, or private search queries are
+          present in any committed code, datasets, or outputs.</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section>
+      <h2><span class="sec-num">3.</span> Transparent Baseline Rule</h2>
+      <p>
+        To establish an honest benchmark, we constructed a human-readable 4-part composite baseline score combining
+        search demand, content staleness, position opportunity, and word count depth gap:
+      </p>
+
+      <div class="latex-equation">
+        $$\text{Score}_{\text{baseline}} = 100 \times \Big( 0.40 \cdot \text{Visibility} + 0.30 \cdot
+        \text{FreshnessRisk} + 0.25 \cdot \text{PositionOpp} + 0.05 \cdot \text{DepthGap} \Big)$$
+      </div>
+
+      <p>
+        The baseline generates six rule-based reason codes: <code>stale_visible_page</code>,
+        <code>declining_with_demand</code>, <code>thin_visible_page</code>, <code>page_one_decay_risk</code>,
+        <code>low_ctr_visible_page</code>, and <code>low_engagement_visible_page</code>.
+      </p>
+      <p>
+        <strong>Baseline Performance (Client-Holdout Test Set):</strong>
+      </p>
+      <ul>
+        <li><strong>Precision@50:</strong> <code>0.300</code> (Base Rate of Decline: <code>0.511</code>)</li>
+        <li><strong>Average Precision (AP):</strong> <code>0.487</code></li>
+        <li><strong>ROC AUC:</strong> <code>0.496</code></li>
+      </ul>
+    </section>
+
+    <!-- Section 4 -->
+    <section>
+      <h2><span class="sec-num">4.</span> Model & Feature Engineering</h2>
+      <p>
+        We evaluated three model architectures against the baseline: <strong>Logistic Regression</strong> (calibrated
+        linear model), <strong>Decision Tree</strong> (depth=5), and <strong>Random Forest</strong> (100 trees,
+        max_depth=10).
+      </p>
+      <p>
+        <strong>Feature Vector (10 signals):</strong> <code>log_impressions_90d</code>, <code>log_clicks_90d</code>,
+        <code>log_sessions_90d</code>, <code>word_count</code>, <code>days_since_last_update</code>,
+        <code>content_age_days</code>, <code>avg_position</code>, <code>ctr</code>, <code>engagement_rate</code>, and
+        <code>scroll_rate</code>. Heavy-tailed count metrics were log-transformed (\(\log(1+x)\)) to stabilize variance.
+      </p>
+      <p>
+        <strong>Target Definition:</strong> Binary target <code>is_declining_label = (trend_direction == "down")</code>,
+        evaluating whether trailing 30-day search impressions dropped by \(&gt;20\%\) relative to the preceding period.
+      </p>
+    </section>
+
+    <!-- Section 5 -->
+    <section>
+      <h2><span class="sec-num">5.</span> Evaluation & Leakage Audit</h2>
+      <p>
+        Validation design dictates model trustworthiness. A standard random train/test split allows pages from the same
+        client to appear in both splits, enabling models to memorize client-specific baseline traffic levels rather than
+        learning general search decay patterns. To enforce strict evaluation, we used <code>GroupShuffleSplit</code> on
+        <code>client_id</code> (80% train clients, 20% holdout clients).
+      </p>
+
+      <div class="table-wrapper">
+        <table class="booktabs">
+          <caption>Table 1: Model Comparison vs. Rule Baseline on Client-Holdout Test Set (Base Rate = 0.511)</caption>
+          <thead>
+            <tr>
+              <th>Method / Model</th>
+              <th class="num-col">Precision@50</th>
+              <th class="num-col">Average Precision</th>
+              <th class="num-col">ROC AUC</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Rule Baseline (Transparent Score)</td>
+              <td class="num-col">0.300</td>
+              <td class="num-col">0.487</td>
+              <td class="num-col">0.496</td>
+            </tr>
+            <tr>
+              <td>Logistic Regression</td>
+              <td class="num-col">0.780</td>
+              <td class="num-col">0.626</td>
+              <td class="num-col">0.628</td>
+            </tr>
+            <tr>
+              <td>Decision Tree (depth=5)</td>
+              <td class="num-col">0.480</td>
+              <td class="num-col">0.580</td>
+              <td class="num-col">0.603</td>
+            </tr>
+            <tr class="selected-model">
+              <td>Random Forest (100 Trees, Final Model)</td>
+              <td class="num-col">0.680</td>
+              <td class="num-col">0.595</td>
+              <td class="num-col">0.604</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        <strong>Leakage Audit Findings:</strong> Evaluating the same Random Forest model under a naïve random split
+        yielded ROC AUC 0.764 / Precision@50 0.940. Enforcing client-grouped holdout splits dropped ROC AUC by 0.159
+        points to 0.604, revealing that 16 ROC AUC points in naïve evaluation stemmed from client-level memorization
+        leakage.
+      </p>
+    </section>
+
+    <!-- Section 6 -->
+    <section>
+      <h2><span class="sec-num">6.</span> Interpretation & Feature Importances</h2>
+      <p>
+        Feature importance analysis from the Random Forest model confirms the structural drivers of search opportunity
+        scoring:
+      </p>
+      <ol>
+        <li><code>log_impressions_90d</code> (26.6%): Search impression exposure is the primary determinant of decay
+          severity and potential impact.</li>
+        <li><code>avg_position</code> (20.0%): Ranking in Page 1 (positions 1–10) vs. Page 2 dictates click sensitivity.
+        </li>
+        <li><code>content_age_days</code> (15.8%): Temporal age increases vulnerability to intent drift.</li>
+        <li><code>word_count</code> (10.3%): Content depth acts as a stabilizing buffer against ranking volatility.</li>
+      </ol>
+      <p>
+        <em>False Positive Analysis:</em> High-confidence false positives primarily occurred on high-impression content
+        items subject to seasonal search demand shifts rather than actual quality degradation.
+      </p>
+    </section>
+
+    <!-- Section 7 -->
+    <section>
+      <h2><span class="sec-num">7.</span> Recommendation & Content Action Playbook</h2>
+      <p>
+        We combine learned model probabilities with our transparent rule baseline to construct the final prioritized
+        refresh score:
+      </p>
+
+      <div class="latex-equation">
+        $$\text{Score}_{\text{final}} = 100 \times \Big( 0.70 \cdot P_{\text{model}} + 0.30 \cdot
+        \frac{\text{Score}_{\text{baseline}}}{100} \Big)$$
+      </div>
+
+      <p>
+        Reason codes trigger automated editorial action mapping:
+      </p>
+      <ul>
+        <li><code>low_ctr_visible_page</code> &rarr; <strong>Rewrite Title & Meta Description (CTR
+            Optimization)</strong></li>
+        <li><code>thin_visible_page</code> &rarr; <strong>Expand Content Depth & Add Comprehensive Sections</strong>
+        </li>
+        <li><code>stale_visible_page</code> &rarr; <strong>Update Outdated Information & Refresh Publication
+            Date</strong></li>
+        <li><code>page_one_decay_risk</code> &rarr; <strong>Protect Page 1 Rank (Internal Linking & Schema
+            Refresh)</strong></li>
+        <li><code>low_engagement_visible_page</code> &rarr; <strong>Improve On-Page Engagement & UX Formatting</strong>
+        </li>
+      </ul>
+      <p>
+        <strong>Final Queue Quality:</strong> Evaluating the top 50 pages in the final blended queue yields a
+        <strong>Precision@50 of 1.000</strong> (100% of top candidates are true declining pages).
+      </p>
+    </section>
+
+    <!-- Section 8 -->
+    <section>
+      <h2><span class="sec-num">8.</span> Reproducibility</h2>
+      <p>
+        The complete pipeline is fully reproducible from source repository artifacts:
+      </p>
+      <ul>
+        <li><strong>Pipeline Execution:</strong> Run <code>work/notebooks/capstone.ipynb</code> top-to-bottom or run
+          <code>python scripts/run_all.py</code>.</li>
+        <li><strong>Environment Dependencies:</strong> Python 3.12, <code>pandas&gt;=2.2</code>,
+          <code>scikit-learn&gt;=1.4</code>, <code>duckdb&gt;=1.0</code>, <code>huggingface_hub&gt;=0.24</code>.</li>
+        <li><strong>Random State:</strong> <code>random_state=42</code> enforced across all data splits and random
+          forests.</li>
+      </ul>
+    </section>
+
+    <!-- Section 9 -->
+    <section>
+      <h2><span class="sec-num">9.</span> Acknowledgments & Data Credit</h2>
+      <p>
+        Built on the FlyRank ML Internship dataset &mdash; linking to <a href="https://flyrank.ai"
+          target="_blank">https://flyrank.ai</a>.
+      </p>
+    </section>
+
+    <!-- Footnotes / References -->
+    <footer class="references">
+      <h3>References & Links</h3>
+      <ol>
+        <li>FlyRank Machine Learning Internship Starter Repository: <a href="https://github.com/AsmSafone/ML-Internship"
+            target="_blank">https://github.com/AsmSafone/ML-Internship</a></li>
+        <li>FlyRank Pseudonymized Warehouse Dataset (v20260703): <a
+            href="https://huggingface.gg/datasets/FlyRank/internship-warehouse" target="_blank">Hugging Face
+            Datasets</a></li>
+        <li>FlyRank Data Platform & Search Intelligence: <a href="https://flyrank.ai"
+            target="_blank">https://flyrank.ai</a></li>
+      </ol>
+    </footer>
+
+  </article>
+
+</body>
+
+</html>
