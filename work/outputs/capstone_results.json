@@ -1,0 +1,26 @@
+[
+  {
+    "Method":"Rule Baseline",
+    "Precision@50":0.3,
+    "Average Precision":0.5201605889,
+    "ROC AUC":0.5276476791
+  },
+  {
+    "Method":"Logistic Regression",
+    "Precision@50":0.78,
+    "Average Precision":0.6259059597,
+    "ROC AUC":0.6278691395
+  },
+  {
+    "Method":"Decision Tree",
+    "Precision@50":0.48,
+    "Average Precision":0.5802707619,
+    "ROC AUC":0.6033640407
+  },
+  {
+    "Method":"Random Forest",
+    "Precision@50":0.68,
+    "Average Precision":0.5951542494,
+    "ROC AUC":0.6043011832
+  }
+]

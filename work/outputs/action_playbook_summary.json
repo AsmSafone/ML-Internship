@@ -1,0 +1,13 @@
+{
+  "total_candidates_ranked": 30000,
+  "top50_precision": 1.0,
+  "top100_precision": 1.0,
+  "top_action_counts": {
+    "Review Content Intent & Refresh": 13392,
+    "Rewrite Title & Meta Description (CTR Optimization)": 9759,
+    "Protect Page 1 Rank (Internal Linking & Schema Refresh)": 3678,
+    "Improve On-Page Engagement & UX Formatting": 3100,
+    "Expand Content Depth & Add Comprehensive Sections": 64,
+    "Update Outdated Information & Refresh Publication Date": 7
+  }
+}
